@@ -130,12 +130,12 @@ def scrape():
         if mars_hires2_soup[pict].attrs['href'][-9:] == '_enhanced':
             # if it does scrape the new url for image links
             pict_html = data_scrape(base_url + mars_hires2_soup[pict].attrs['href'])
-            pict_soup = pict_html.find_all('dd')
-            # add a dictionry containing the image title, the hi-res photo link and a thumb 
-            # image link the thumb image link is added so my site will still be able to display
-            # an image even if the hi-res is down
-            pict_list.append({'title': mars_hires2_soup[pict].h3.text[:-9], 'img_url': pict_soup[1].a.attrs['href'], 'tmb_url':\
-                            base_url + mars_hires2_soup[pict].img.attrs['src']})
+            pict_soup = pict_html.find_all('div', class_='downloads')
+
+            # add a dictionary containing the image title, the hi-res photo link and a thumb image link
+            # the thumb image link is added so my site will still be able to display an image even if the hi-res is down
+            pict_list.append({'title': mars_hires2_soup[pict].h3.text[:-9], 'img_url': pict_soup[0].a.attrs['href'], 'tmb_url':\
+                            base_url + pict_soup[0].img.attrs['src']})
 
     result_dict['hi-res'] = pict_list
 
