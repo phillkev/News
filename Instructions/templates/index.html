@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>MARS ATTACKS!!!!!!</title>
+
+    <!-- Bring in our bootstrap stylesheet -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">  
+        <!-- <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}"> -->
+        <link rel="stylesheet" href="../static/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Ubuntu');
+    </style>
+    <!--  This meta is used to help scaling on ios devices-->
+    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="card" id="head">
+            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+            <div class="card-body" id="head">
+            <h1 class="card-title">Mission to Mars</h1>
+            <a href="{{url_for('scrape')}}" class="btn btn-primary">Scrape New Data</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- article = result_data[0]['articles']
+    main_photo = result_data[0]['main photo']
+    weather = result_data[0]['weather']
+    facts = result_data[0]['facts']
+    hires = result_data[0]['hi-res'] -->
+
+    <div class="container">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2>Latest Mars News</h2>
+            <h3>{{ article['title'] }}</h3>
+            <p>{{ article['teaser'] }}</p>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                <h2>Featured Mars Image</h2>
+                <img id="featured" src="{{ main_photo }}">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                    <h3 class="card-title">Mission to Mars</h3>
+                            <p>{{ weather }}></p>
+                    </div>
+                </div>
+                <div><p> </p></div>
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Martian Facts
+                        </h3>
+                        {{ facts }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <img class="card-img-top" src="{{ hires[0]['img_url'] }}" alt="{{ hires[0]['title'] }}">
+                    <p>{{ hires[0]['title'] }}</p>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <img class="card-img-top" src="{{ hires[1]['img_url'] }}" alt="{{ hires[1]['title'] }}">
+                    <p>{{ hires[1]['title'] }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <img class="card-img-top" src="{{ hires[2]['img_url'] }}" alt="{{ hires[2]['title'] }}">
+                    <p>{{ hires[2]['title'] }}</p>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <img class="card-img-top" src="{{ hires[3]['img_url'] }}" alt="{{ hires[3]['title'] }}">
+                    <p>{{ hires[3]['title'] }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
