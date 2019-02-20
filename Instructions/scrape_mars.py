@@ -10,13 +10,13 @@ def init_browser():
 
 
 
-def data_scrape(url):
-    browser = init_browser()
+def data_scrape(url, browser):
+    # browser = init_browser()
     browser.visit(url)
 
     html = browser.html
     soup = BeautifulSoup(html, "html.parser")
-    browser.quit()
+    # browser.quit()
     return soup
 
 # article_listings = data_scrape("https://mars.nasa.gov/news/")
@@ -28,9 +28,10 @@ def data_scrape(url):
 
 def scrape():
     result_dict = {}
+    browser = init_browser()
 
     # Article listings
-    article_listings = data_scrape("https://mars.nasa.gov/news/")
+    article_listings = data_scrape("https://mars.nasa.gov/news/", browser)
 
     titles = article_listings.find_all('div', class_='list_text')
     subtitle = article_listings.find_all('div', class_='article_teaser_body')
@@ -57,7 +58,7 @@ def scrape():
     search_value = "/spaceimages/?search=&category=Mars"
     url = base_url + search_value
 
-    mars_photo_scrap = data_scrape(url)
+    mars_photo_scrap = data_scrape(url,browser)
 
     main_photo_section = mars_photo_scrap.find_all('a', class_='button', id='full_image')
 
@@ -69,7 +70,7 @@ def scrape():
     result_dict['main photo'] = large_photo_link
 
     # Mars twitter scrape
-    mars_weather = data_scrape("https://twitter.com/marswxreport?lang=en")
+    mars_weather = data_scrape("https://twitter.com/marswxreport?lang=en", browser)
 
     mars_weather_text = mars_weather.find_all('p', class_='TweetTextSize TweetTextSize--normal js-tweet-text tweet-text')
 
@@ -78,18 +79,19 @@ def scrape():
     # we only want the most recent weather data so break from loop as soon as the first tweet that has the text starting with 
     # Sol is found
     for tweet in tweet_range:
-        if mars_weather_text[tweet].text[:3] == 'Sol':
+        if mars_weather_text[tweet].text[:7] == 'InSight':
             weather_string = mars_weather_text[tweet].text
             break
 
-    t = weather_string.find("pic.twitter")
-    weather_string = weather_string[:t]
+    t = weather_string.find("\n")
+    if t > 0:
+        weather_string = weather_string[:t]
 
     result_dict['weather'] = weather_string
 
     # Mars facts
 
-    mars_facts = data_scrape("https://space-facts.com/mars/")
+    mars_facts = data_scrape("https://space-facts.com/mars/", browser)
 
     mars_facts_title_soup = mars_facts.find_all('td', class_='column-1')
     mars_facts_value_soup = mars_facts.find_all('td', class_='column-2')
@@ -102,23 +104,21 @@ def scrape():
         mars_facts_titles.append(mars_facts_title_soup[row].text)
         mars_facts_values.append(mars_facts_value_soup[row].text)
 
-    mars_facts_table = pd.DataFrame({"title": mars_facts_titles,
-                                "value": mars_facts_values})
+    mars_facts_table = pd.DataFrame({"Title": mars_facts_titles,
+                                "Value": mars_facts_values})
 
-
-    mars_facts_table.to_html('templates\mars_facts.html', index=False)
-
+    mars_facts_table.to_html('templates\mars_facts.html', index=False, justify='center')
 
     with open('templates\mars_facts.html', 'r') as f:
         table_html = f.read()
-
+    
     result_dict['facts'] = table_html
 
     # Mars Hemisphere Hi-res pictures
 
     base_url = "https://astrogeology.usgs.gov"
 
-    mars_hires2 = data_scrape("https://astrogeology.usgs.gov/maps/mars-viking-hemisphere-point-perspectives")
+    mars_hires2 = data_scrape("https://astrogeology.usgs.gov/maps/mars-viking-hemisphere-point-perspectives",browser)
 
     mars_hires2_soup = mars_hires2.find_all('a', class_="item")
 
@@ -129,7 +129,7 @@ def scrape():
         # check to see if the href ends in _enhanced
         if mars_hires2_soup[pict].attrs['href'][-9:] == '_enhanced':
             # if it does scrape the new url for image links
-            pict_html = data_scrape(base_url + mars_hires2_soup[pict].attrs['href'])
+            pict_html = data_scrape(base_url + mars_hires2_soup[pict].attrs['href'],browser)
             pict_soup = pict_html.find_all('div', class_='downloads')
 
             # add a dictionary containing the image title, the hi-res photo link and a thumb image link
@@ -138,5 +138,6 @@ def scrape():
                             base_url + pict_soup[0].img.attrs['src']})
 
     result_dict['hi-res'] = pict_list
+    browser.quit()
 
     return result_dict
