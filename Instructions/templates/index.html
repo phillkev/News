@@ -9,8 +9,9 @@
     <!-- Bring in our bootstrap stylesheet -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">  
-        <!-- <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}"> -->
-        <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <!-- <link rel="stylesheet" href="static/style.css"> -->
+    <!-- <link rel="stylesheet" href="../static/style.css"> -->
     <style>
         @import url('https://fonts.googleapis.com/css?family=Ubuntu');
     </style>
@@ -65,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="hemisphere">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div class="card">
                     <img class="card-img-top" src="{{ hires[0]['img_url'] }}" alt="{{ hires[0]['title'] }}">
@@ -79,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="hemisphere">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div class="card">
                     <img class="card-img-top" src="{{ hires[2]['img_url'] }}" alt="{{ hires[2]['title'] }}">
