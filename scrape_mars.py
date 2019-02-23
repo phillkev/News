@@ -90,7 +90,9 @@ def scrape():
             break
 
     # On 2/17 the weather feed had additional information.  I decided to remove all information after a \n if one was found
-    t = weather_string.find("\n")
+    # They changed the formating of the string again and I need the information after \n so I changed the code to remove the new
+    # undesired value.
+    t = weather_string.find("pic")
     if t > 0:
         weather_string = weather_string[:t]
 
